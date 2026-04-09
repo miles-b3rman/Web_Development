@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MadLibs Page</title>
+
+    <style>
+        #results {
+            display: none;
+        }
+    </style>
+
+    <h1>Funny MadLibs</h1>
+
+    <div id="entry">
+        <h1>Test Page</h1>
+
+        <p>Enter: <input type="text" id="enter_input"></p>
+        <p>Noun (Hot Dog): <input type="text" id="hotdog_input"></p>
+        <p>Noun (Fries): <input type="text" id="fries_input"></p>
+        <p>Adjective (Awful): <input type="text" id="awful_input"></p>
+        <p>Verb (Energetic): <input type="text" id="energetic_input"></p>
+        <p>Noun (Hot Dogs): <input type="text" id="hotdogs_input"></p>
+        <p>Adjective (Bad Breath): <input type="text" id="badbreath_input"></p>
+        <p>Adjective (Stinky): <input type="text" id="stinky_input"></p>
+        <p>Verb (Ate It): <input type="text" id="ateit_input"></p>
+
+        <button onclick="madlibs()">Submit</button>
+    </div>
+
+    <div id="results">
+        <h1>Results</h1>
+        <p>
+            Yesterday I went out to eat a <span id="hotdog_output">____</span>.
+            They gave me a free side of <span id="fries_output">____</span>.
+            It tasted very <span id="awful_output">____</span>.
+            However, it also made me <span id="energetic_output">____</span> immediately after.
+            After lunch, I went to the museum, where they showed ancient <span id="hotdogs_output">____</span> from 2,000 years ago.
+            They say if you touch it you will be cursed with <span id="badbreath_output">____</span>,
+            leaving you <span id="stinky_output">____</span> forever!
+            But I didn’t believe the curse was real, so I <span id="ateit_output">____</span> anyway!
+        </p>
+    </div>
+
+    <script>
+        function madlibs() {
+            let name = document.getElementById("enter_input").value;
+            let hotdog = document.getElementById("hotdog_input").value;
+            let fries = document.getElementById("fries_input").value;
+            let awful = document.getElementById("awful_input").value;
+            let energetic = document.getElementById("energetic_input").value;
+            let hotdogs = document.getElementById("hotdogs_input").value;
+            let badbreath = document.getElementById("badbreath_input").value;
+            let stinky = document.getElementById("stinky_input").value;
+            let ateit = document.getElementById("ateit_input").value;
+
+            if (
+                hotdog === "" ||
+                fries === "" ||
+                awful === "" ||
+                energetic === "" ||
+                hotdogs === "" ||
+                badbreath === "" ||
+                stinky === "" ||
+                ateit === ""
+            ) {
+                alert("Incomplete");
+                return;
+            }
+
+            document.getElementById("hotdog_output").textContent = hotdog;
+            document.getElementById("fries_output").textContent = fries;
+            document.getElementById("awful_output").textContent = awful;
+            document.getElementById("energetic_output").textContent = energetic;
+            document.getElementById("hotdogs_output").textContent = hotdogs;
+            document.getElementById("badbreath_output").textContent = badbreath;
+            document.getElementById("stinky_output").textContent = stinky;
+            document.getElementById("ateit_output").textContent = ateit;
+
+            document.getElementById("results").style.display = "block";
+        }
+    </script>
+
+    </body>
+</html>
