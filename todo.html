@@ -2,14 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>To Do List</title>
-</head>To Do List
+    <title>To Do</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 8px;
+            width: 200px;
+            border: none;
+        }
+
+        button {
+            padding: 8px;
+            cursor: pointer;
+            background-color: white;
+            border: none;
+        }
+
+        #task_list {
+            margin-top: 25px;
+        }
+
+        .task {
+            background-color: #333;
+            margin: 10px auto;
+            padding: 10px;
+            width: 250px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .delete {
+            cursor: pointer;
+        }
+
+        .task:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+
 <body>
-<style>backgroundcolor=blue</style>
+
+<h1>My Tasks</h1>
+
+<input id="taskInput" placeholder="type something...">
+<button onclick="addTask()">Add</button>
+
+<div id="task_list"></div>
 
 <script>
-    function new_task(){}
-    let taskname
+    function addTask() {
+        let input = document.getElementById("taskInput");
+        let text = input.value;
+
+        if (text === "") return;
+
+        let task = document.createElement("div");
+        task.className = "task";
+
+        let left = document.createElement("div");
+        left.className = "left";
+
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+
+        let label = document.createElement("span");
+        label.innerText = text;
+
+        checkbox.onclick = function () {
+            label.classList.toggle("done");
+        };
+
+        let del = document.createElement("span");
+        del.innerText = "✖";
+        del.className = "delete";
+
+        del.onclick = function () {
+            task.remove();
+        };
+
+        left.appendChild(checkbox);
+        left.appendChild(label);
+
+        task.appendChild(left);
+        task.appendChild(del);
+
+        document.getElementById("task_list").appendChild(task);
+
+        input.value = "";
+    }
 </script>
+
 </body>
 </html>
