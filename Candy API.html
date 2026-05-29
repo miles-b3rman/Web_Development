@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Perfect Circle Game</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: saddlebrown;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            background: #E5AA70;
+            border: 5px solid white;
+            border-radius: 10px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .stats {
+            margin-top: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: white;
+        }
+    </style>
+    </head>
+<body>
+
+<h1>Perfect Circle Game</h1>
+
+<canvas id="canvas" width="600" height="600"></canvas>
+
+<div class="stats">
+    <div>Accuracy: <span id="accuracy">0</span>%</div>
+    <div>High Score: <span id="highscore">0</span>%</div>
+</div>
+
+<button onclick="resetCanvas()">Try Again</button>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const accuracyText = document.getElementById("accuracy");
+    const highScoreText = document.getElementById("highscore");
+
+    let drawing = false;
+    let points = [];
+
+    let highScore = localStorage.getItem("circleHighScore") || 0;
+    highscore.innerText = highScore;
+
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", endDraw);
+
+    canvas.addEventListener("touchstart", startDraw);
+    canvas.addEventListener("touchmove", draw);
+    canvas.addEventListener("touchend", endDraw);
+
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+
+        if (e.touches) {
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top,
+            };
+        }
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+        };
+    }
+
+    function startDraw(e) {
+        e.preventDefault();
+
+        drawing = true;
+        points = [];
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const pos = getPos(e);
+
+        points.push(pos);
+
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        if (!drawing) return;
+
+        e.preventDefault();
+
+        const pos = getPos(e);
+
+        points.push(pos);
+
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "white";
+
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function endDraw() {
+        if (!drawing) return;
+
+        drawing = false;
+
+        if (points.length < 10) return;
+
+        calculateAccuracy();
+    }
+
+    function calculateAccuracy() {
+        let centerX = 0;
+        let centerY = 0;
+
+        for (const p of points) {
+            centerX += p.x;
+            centerY += p.y;
+        }
+
+        centerX /= points.length;
+        centerY /= points.length;
+
+        let radii = [];
+
+        for (const p of points) {
+            const dx = p.x - centerX;
+            const dy = p.y - centerY;
+
+            radii.push(Math.sqrt(dx * dx + dy * dy));
+        }
+
+        const avgRadius =
+            radii.reduce((a, b) => a + b, 0) / radii.length;
+
+        let variance = 0;
+
+        for (const r of radii) {
+            variance += Math.pow(r - avgRadius, 2);
+        }
+
+        variance /= radii.length;
+
+        const stdDev = Math.sqrt(variance);
+
+        let score = Math.max(0, 100 - stdDev * 2);
+
+        score = Math.round(score);
+
+        accuracyText.textContent = score;
+
+        if (score > highScore) {
+            highScore = score;
+
+            localStorage.setItem(
+                "circleHighScore",
+                highScore
+            );
+
+            highscoreText.textContent = highScore;
+        }ctx.beginPath();
+        ctx.strokeStyle = "lime";
+        ctx.lineWidth = 2;
+        ctx.arc(centerX, centerY, avgRadius, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+
+    function resetCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        accuracyText.textContent = "0";
+    }
+</script>
+
+</body>
+</html>

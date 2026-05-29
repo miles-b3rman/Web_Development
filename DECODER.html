@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secret Encoder</title>
+
+    <style>
+        body {
+            background-color: #dcdcdc;
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        .box {
+            background: white;
+            width: 350px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: darkred;
+        }
+
+        input {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            padding: 5px;
+            width: 95%;
+        }
+
+        button {
+            background-color: darkred;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h1>Secret Encoder</h1>
+
+    <label>Shift Number:</label>
+    <input type="number" id="shift" value="4">
+
+    <label>Message:</label>
+    <input type="text" id="message" placeholder="type here">
+
+    <button onclick="makeCode()">Encrypt</button>
+
+    <p id="output"></p>
+
+</div>
+
+<script>
+
+    function makeCode() {
+
+        let shift = Number(document.getElementById("shift").value);
+
+        let text = document.getElementById("message").value.toUpperCase();
+
+        let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+
+        let finalMessage = "";
+
+        for (let i = 0; i < text.length; i++) {
+
+            let currentLetter = text[i];
+
+            let position = letters.indexOf(currentLetter);
+
+            if (position === -1) {
+
+                finalMessage += currentLetter;
+
+            } else {
+
+                let newPosition = position + shift;
+
+                if (newPosition >= letters.length) {
+                    newPosition = newPosition % letters.length;
+                }
+
+                if (newPosition < 0) {
+                    newPosition += letters.length;
+                }
+
+                finalMessage += letters[newPosition];
+            }
+        }
+
+        document.getElementById("output").innerText = finalMessage;
+    }
+
+</script>
+
+</body>
+</html>

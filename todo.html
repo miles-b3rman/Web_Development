@@ -75,6 +75,13 @@
 <div id="task_list"></div>
 
 <script>
+    document.getElementById("taskInput").addEventListener("keypress", function(e) {
+        console.log(e);
+        if (e.key==="Enter") {
+            addTask();
+        }
+    })
+
     function addTask() {
         let input = document.getElementById("taskInput");
         let text = input.value;
@@ -119,3 +126,5 @@
 
 </body>
 </html>
+
+<h3><a href="" > Back To Homepage!</h3>
